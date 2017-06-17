@@ -77,6 +77,45 @@ class UtilTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ParagonIE_Sodium_Core_Util::declareScalarType()
+     */
+    public function testDeclareScalarType()
+    {
+        try {
+            ParagonIE_Sodium_Core_Util::declareScalarType();
+        } catch (TypeError $ex) {
+            $this->fail('declareScalarType() with zero arguments');
+        }
+
+        try {
+            $arg = null;
+            ParagonIE_Sodium_Core_Util::declareScalarType($arg, 'null');
+            $arg = true;
+            ParagonIE_Sodium_Core_Util::declareScalarType($arg, 'bool');
+            $arg = false;
+            ParagonIE_Sodium_Core_Util::declareScalarType($arg, 'bool');
+            $arg = '';
+            ParagonIE_Sodium_Core_Util::declareScalarType($arg, 'string');
+            $arg = 0;
+            ParagonIE_Sodium_Core_Util::declareScalarType($arg, 'int');
+            $arg  = 0.2;
+            ParagonIE_Sodium_Core_Util::declareScalarType($arg, 'float');
+            $arg = array(1, 2, 3);
+            ParagonIE_Sodium_Core_Util::declareScalarType($arg, 'array');
+        } catch (TypeError $ex) {
+            $this->fail('declareScalarType() with two arguments');
+        }
+
+        try {
+            $arg = true;
+            ParagonIE_Sodium_Core_Util::declareScalarType($arg, 'null');
+            $this->fail('Expected a failure here.');
+        } catch (TypeError $ex) {
+            $this->assertTrue($ex instanceof TypeError);
+        }
+    }
+
+    /**
      * @covers ParagonIE_Sodium_Core_Util::hashEquals()
      */
     public function testHashEquals()
